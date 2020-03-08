@@ -80,7 +80,6 @@ class AxisControls extends HTMLElement {
     }
 
     set value(newValue) {
-        this.setAttribute('value', newValue);
         this.angleInputBox.value = newValue;
         this.slider.value = newValue;
         this.fireValueChanged();
