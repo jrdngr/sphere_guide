@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sphere Guide</title>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+    <canvas id="canvas" width="420" height="420"></canvas> 
+    <div class="sliders">
+        <div class="slider-group">
+            <input type="range" min="0" max="360" value="0" class="slider" id="x-range" step="1">
+            <label>x: </label>
+            <input type="number" min="0" max="360" value="0" class="angle-input" id="x-value"/>
+        </div>
+        <div class="slider-group">
+            <input type="range" min="0" max="360" value="0" class="slider" id="y-range" step="1">
+            <label>y: </label>  
+            <input type="number" min="0" max="360" value="0" class="angle-input" id="y-value"/>
+        </div>
+        <div class="slider-group">
+            <input type="range" min="0" max="360" value="0" class="slider" id="z-range" step="1">
+            <label>z: </label>  
+            <input type="number" min="0" max="360" value="0" class="angle-input" id="z-value"/>
+        </div>
+        <button id="reset-button">Reset</button>
+    </div>    
+    <script src="index.js"></script>  
+</body>
+</html>
