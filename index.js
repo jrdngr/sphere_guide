@@ -8,11 +8,12 @@ const xRange = document.getElementById("x-range");
 const yRange = document.getElementById("y-range");
 const zRange = document.getElementById("z-range");
 
-
 const inputBoxes = document.getElementsByClassName("angle-input");
 const xInput = document.getElementById("x-value");
 const yInput = document.getElementById("y-value");
 const zInput = document.getElementById("z-value");
+
+const useColorsCheckbox = document.getElementById("use-colors-checkbox");
 
 const mouseDamping = 1/3;
 const increase_by = 0.4;
@@ -22,8 +23,20 @@ const angles = [0, 0, 0]; // rotation angles
 function drawPoint(coor, hue, lightness = "50%") {
     // If the points z coordinate is less than
     // zero, it is out of view thus, grey.
-    if (coor[2] >= 0) color = `hsl(${hue},100%,${lightness})`;
-    else color = `hsl(${hue},100%,90%)`;
+    let color;
+    if (coor[2] >= 0) {
+        if (useColorsCheckbox.checked) {
+            color = `hsl(${hue},100%,${lightness})`;
+        } else {
+            color = "rgb(0, 0, 0)";
+        }
+    } else { 
+        if (useColorsCheckbox.checked) {
+            color = `hsl(${hue},100%,90%)`;
+        } else {
+            color = "rgb(200, 200, 200)"
+        }
+    }
     ctx.fillStyle = color;
     ctx.fillRect(210 + coor[0], 210 - coor[1], 1, 1);
 }
@@ -156,6 +169,10 @@ function onResetClicked() {
     drawAxisCircles();
 }
 
+function onColoredAxesChanged() {
+    drawAxisCircles();
+}
+
 function onMouseMove(event) {
     if (event.buttons > 0) {
         const x = getCoordinate('x');
@@ -172,6 +189,7 @@ function onMouseMove(event) {
 
 document.getElementById("reset-button").onclick = onResetClicked;
 canvas.addEventListener('mousemove', onMouseMove);
+useColorsCheckbox.addEventListener('change', onColoredAxesChanged);
 
 for (const slider of sliders) {
     slider.addEventListener('input', onCoordinateChanged);

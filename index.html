@@ -12,18 +12,22 @@
     <div class="sliders">
         <div class="slider-group">
             <input type="range" min="0" max="360" value="0" class="slider" id="x-range" step="1">
-            <label>x: </label>
+            <label style="color: hsl(0, 100%, 50%)">x: </label>
             <input type="number" min="0" max="360" value="0" class="angle-input" id="x-value"/>
         </div>
         <div class="slider-group">
             <input type="range" min="0" max="360" value="0" class="slider" id="y-range" step="1">
-            <label>y: </label>  
+            <label style="color: hsl(128, 100%, 50%)">y: </label>  
             <input type="number" min="0" max="360" value="0" class="angle-input" id="y-value"/>
         </div>
         <div class="slider-group">
             <input type="range" min="0" max="360" value="0" class="slider" id="z-range" step="1">
-            <label>z: </label>  
+            <label style="color: hsl(256, 100%, 50%)">z: </label>  
             <input type="number" min="0" max="360" value="0" class="angle-input" id="z-value"/>
+        </div>
+        <div class="use-colors">
+            <input type="checkbox" id="use-colors-checkbox" checked />
+            <span>Colored Axes</span>
         </div>
         <button id="reset-button">Reset</button>
     </div>    
