@@ -10,6 +10,7 @@ class AxisControls extends HTMLElement {
         const isVisibleCheckbox = document.createElement('input');
         isVisibleCheckbox.type = "checkbox";
         isVisibleCheckbox.checked = this.getAttribute('visible') === '';
+        isVisibleCheckbox.onchange = this.fireVisibilityChanged.bind(this);
         container.appendChild(isVisibleCheckbox);
 
         const label = document.createElement('label');
@@ -59,8 +60,18 @@ class AxisControls extends HTMLElement {
             this.slider.value = event.target.value;
         }
 
+        this.fireValueChanged();
+    }
+
+    fireValueChanged() {
         this.dispatchEvent(new CustomEvent('value-changed', { 
             value: this.value,
+        }));
+    }
+
+    fireVisibilityChanged() {
+        this.dispatchEvent(new CustomEvent('visibility-changed', { 
+            value: this.visible,
         }));
     }
 
@@ -68,8 +79,20 @@ class AxisControls extends HTMLElement {
         return this.angleInputBox.value;
     }
 
-    get isVisible() {
+    set value(newValue) {
+        this.setAttribute('value', newValue);
+        this.angleInputBox.value = newValue;
+        this.slider.value = newValue;
+        this.fireValueChanged();
+    }
+
+    get visible() {
         return this.isVisibleCheckbox.checked;
+    }
+
+    set visible(newValue) {
+        this.isVisibleCheckbox.checked = newValue;
+        this.fireVisibilityChanged();
     }
 }
 

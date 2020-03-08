@@ -12,7 +12,7 @@ const useColorsCheckbox = document.getElementById("use-colors-checkbox");
 const mouseDamping = 1/3;
 const increase_by = 0.4;
 const r = 200; // radius
-const angles = [0, 0, 0]; // rotation angles
+const angles = [0, 0, 0];
 
 function drawPoint(coor, hue, lightness = "50%") {
     // If the points z coordinate is less than
@@ -90,7 +90,7 @@ function rotate(coor) {
     return rotateForAxis(
         2, rotateForAxis(
             1, rotateForAxis(
-                0, coor, angles[0]), angles[1]), angles[2]);
+                0, coor, -angles[0]), -angles[1]), -angles[2]);
 }
 
 // Draw three axis circles
@@ -98,19 +98,19 @@ function drawAxisCircles() {
     // Clear canvas
     ctx.clearRect(0, 0, 420, 420);
 
-    if (xControls.isVisible) {
+    if (xControls.visible) {
         for (let i = 0; i < 360; i += increase_by) {
             drawPoint(rotate(sphericalToPoint(0, i)), 0);
         }
     }
 
-    if (yControls.isVisible) {
+    if (yControls.visible) {
         for (let i = 0; i < 360; i += increase_by) {
             drawPoint(rotate(sphericalToPoint(i, 90)), 128);
         }
     }
 
-    if (zControls.isVisible) {
+    if (zControls.visible) {
         for (let i = 0; i < 360; i += increase_by) {
             drawPoint(rotate(sphericalToPoint(90, i)), 256);
         }
@@ -119,38 +119,26 @@ function drawAxisCircles() {
     drawContour();
 }
 
-function getCoordinate(axis) {
-    if (axis.startsWith('x')) {
-        return -angles[0];
+function getControls(name) {
+    if (name.startsWith('x')) {
+        return xControls;
 
-    } else if (axis.startsWith('y')) {
-        return -angles[1];
+    } else if (name.startsWith('y')) {
+        return yControls;
 
-    } else if (axis.startsWith('z')) {
-        return -angles[2];
+    } else if (name.startsWith('z')) {
+        return zControls;
     }
 
     return undefined;
 }
 
+function getCoordinate(axis) {
+    return getControls(axis).value;
+}
+
 function setCoordinate(axis, value) {
-    const fixedValue = realMod(value, 360);
-
-    if (axis.startsWith('x')) {
-        angles[0] = -fixedValue;
-        xInput.value = fixedValue;
-        xRange.value = fixedValue;
-
-    } else if (axis.startsWith('y')) {
-        angles[1] = -fixedValue;
-        yInput.value = fixedValue;
-        yRange.value = fixedValue;
-
-    } else if (axis.startsWith('z')) {
-        angles[2] = -fixedValue;
-        zInput.value = fixedValue;
-        zRange.value = fixedValue;
-    }
+    getControls(axis).value = realMod(value, 360);
 }
 
 function setAllCoordinates(x, y, z) {
@@ -183,13 +171,26 @@ function onMouseMove(event) {
     }
 }
 
+function onValueChanged() {
+    angles[0] = xControls.value;
+    angles[1] = yControls.value;
+    angles[2] = zControls.value;
+
+    drawAxisCircles();
+}
+
 document.getElementById("reset-button").onclick = onResetClicked;
 canvas.addEventListener('mousemove', onMouseMove);
 useColorsCheckbox.addEventListener('change', drawAxisCircles);
 
-xControls.addEventListener('value-changed', drawAxisCircles);
-yControls.addEventListener('value-changed', drawAxisCircles);
-zControls.addEventListener('value-changed', drawAxisCircles);
+xControls.addEventListener('value-changed', onValueChanged);
+xControls.addEventListener('visibility-changed', drawAxisCircles);
+
+yControls.addEventListener('value-changed', onValueChanged);
+yControls.addEventListener('visibility-changed', drawAxisCircles);
+
+zControls.addEventListener('value-changed', onValueChanged);
+zControls.addEventListener('visibility-changed', drawAxisCircles);
 
 
 drawAxisCircles();
