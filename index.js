@@ -4,14 +4,19 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const sliders = document.getElementsByClassName("slider");
-const xRange = document.getElementById("x-range");
-const yRange = document.getElementById("y-range");
-const zRange = document.getElementById("z-range");
-
 const inputBoxes = document.getElementsByClassName("angle-input");
+
+const xRange = document.getElementById("x-range");
 const xInput = document.getElementById("x-value");
+const xEnabled = document.getElementById('x-enabled');
+
+const yRange = document.getElementById("y-range");
 const yInput = document.getElementById("y-value");
+const yEnabled = document.getElementById('y-enabled');
+
+const zRange = document.getElementById("z-range");
 const zInput = document.getElementById("z-value");
+const zEnabled = document.getElementById('z-enabled');
 
 const useColorsCheckbox = document.getElementById("use-colors-checkbox");
 
@@ -104,16 +109,22 @@ function drawAxisCircles() {
     // Clear canvas
     ctx.clearRect(0, 0, 420, 420);
 
-    for (i = 0; i < 360; i += increase_by) {
-        drawPoint(rotate(sphericalToPoint(0, i)), 0);
+    if (xEnabled.checked) {
+        for (i = 0; i < 360; i += increase_by) {
+            drawPoint(rotate(sphericalToPoint(0, i)), 0);
+        }
     }
 
-    for (i = 0; i < 360; i += increase_by) {
-        drawPoint(rotate(sphericalToPoint(i, 90)), 128);
+    if (yEnabled.checked) {
+        for (i = 0; i < 360; i += increase_by) {
+            drawPoint(rotate(sphericalToPoint(i, 90)), 128);
+        }
     }
 
-    for (i = 0; i < 360; i += increase_by) {
-        drawPoint(rotate(sphericalToPoint(90, i)), 256);
+    if (zEnabled.checked) {
+        for (i = 0; i < 360; i += increase_by) {
+            drawPoint(rotate(sphericalToPoint(90, i)), 256);
+        }
     }
 
     drawContour();
@@ -169,10 +180,6 @@ function onResetClicked() {
     drawAxisCircles();
 }
 
-function onColoredAxesChanged() {
-    drawAxisCircles();
-}
-
 function onMouseMove(event) {
     if (event.buttons > 0) {
         const x = getCoordinate('x');
@@ -189,7 +196,10 @@ function onMouseMove(event) {
 
 document.getElementById("reset-button").onclick = onResetClicked;
 canvas.addEventListener('mousemove', onMouseMove);
-useColorsCheckbox.addEventListener('change', onColoredAxesChanged);
+useColorsCheckbox.addEventListener('change', drawAxisCircles);
+xEnabled.addEventListener('change', drawAxisCircles);
+yEnabled.addEventListener('change', drawAxisCircles);
+zEnabled.addEventListener('change', drawAxisCircles);
 
 for (const slider of sliders) {
     slider.addEventListener('input', onCoordinateChanged);
