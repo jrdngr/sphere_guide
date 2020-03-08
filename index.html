@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,34 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sphere Guide</title>
     <link rel="stylesheet" href="styles.css"/>
+    <script type="module" src="index.js"></script>
+    <script type="module" src="axis.js"></script>
 </head>
 <body>
     <canvas id="canvas" width="420" height="420"></canvas> 
-    <div class="sliders">
-        <div class="slider-group">
-            <input type="range" min="0" max="360" value="0" class="slider" id="x-range" step="1">
-            <label style="color: hsl(0, 100%, 50%)">x: </label>
-            <input type="number" min="0" max="360" value="0" class="angle-input" id="x-value"/>
-            <input type="checkbox" id="x-enabled" checked/>
-        </div>
-        <div class="slider-group">
-            <input type="range" min="0" max="360" value="0" class="slider" id="y-range" step="1">
-            <label style="color: hsl(128, 100%, 50%)">y: </label>  
-            <input type="number" min="0" max="360" value="0" class="angle-input" id="y-value"/>
-            <input type="checkbox" id="y-enabled" checked/>
-        </div>
-        <div class="slider-group">
-            <input type="range" min="0" max="360" value="0" class="slider" id="z-range" step="1">
-            <label style="color: hsl(256, 100%, 50%)">z: </label>  
-            <input type="number" min="0" max="360" value="0" class="angle-input" id="z-value"/>
-            <input type="checkbox" id="z-enabled" checked/>
-        </div>
+    <div class="controls">
+        <axis-controls id="x-controls" color="hsl(0, 100%, 50%)" visible>x</axis-controls>
+        <axis-controls id="y-controls" color="hsl(127, 100%, 50%)" visible>y</axis-controls>
+        <axis-controls id="z-controls" color="hsl(255, 100%, 50%)" visible>z</axis-controls>
         <div class="use-colors">
             <input type="checkbox" id="use-colors-checkbox" checked />
             <span>Colored Axes</span>
         </div>
         <button id="reset-button">Reset</button>
-    </div>    
-    <script src="index.js"></script>  
+    </div> 
 </body>
 </html>
