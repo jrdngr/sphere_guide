@@ -79,7 +79,7 @@ class AxisControls extends HTMLElement {
     }
 
     get angle() {
-        return this.angleInputBox.value;
+        return parseInt(this.angleInputBox.value);
     }
 
     set angle(newValue) {

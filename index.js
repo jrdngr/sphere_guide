@@ -27,11 +27,11 @@ function getControls(name) {
 }
 
 function getCoordinate(axis) {
-    return getControls(axis).value;
+    return getControls(axis).angle;
 }
 
-function setCoordinate(axis, value) {
-    getControls(axis).angle = realMod(value, 360);
+function setCoordinate(axis, angle) {
+    getControls(axis).angle = realMod(angle, 360);
 }
 
 function setAllCoordinates(x, y, z) {
@@ -77,7 +77,7 @@ function draw() {
 }
 
 document.getElementById("reset-button").onclick = onResetClicked;
-//canvas.addEventListener('mousemove', onMouseMove);
+sphere.addEventListener('mousemove', onMouseMove);
 useColorsCheckbox.addEventListener('change', onUseColorChanged);
 
 xControls.addEventListener('value-changed', onStateChanged);
