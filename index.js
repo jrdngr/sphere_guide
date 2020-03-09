@@ -10,7 +10,7 @@ const zControls = document.getElementById('z-controls');
 
 const useColorsCheckbox = document.getElementById("use-colors-checkbox");
 
-const mouseDamping = 1/3;
+const MOUSE_DAMPING = 1/3;
 
 function getControls(name) {
     if (name.startsWith('x')) {
@@ -48,11 +48,11 @@ function onResetClicked() {
 function onMouseMove(event) {
     if (event.buttons > 0) {
         const x = getCoordinate('x');
-        let newX = x - Math.floor(event.movementY * mouseDamping);
+        let newX = x - Math.floor(event.movementY * MOUSE_DAMPING);
         setCoordinate('x', newX);
 
         const y = getCoordinate('y');
-        let newY = y + Math.floor(event.movementX * mouseDamping);
+        let newY = y + Math.floor(event.movementX * MOUSE_DAMPING);
         setCoordinate('y', newY);
 
         draw()

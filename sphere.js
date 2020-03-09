@@ -58,42 +58,46 @@ class SphereCanvas extends HTMLElement {
         this.draw();
     }
 
-    drawPoint(coor, hue, lightness = "50%") {
-        // If the points z coordinate is less than
-        // zero, it is out of view thus, grey.
-        let color;
-        if (coor[2] >= 0) {
-            if (this.useColors) {
-                color = `hsl(${hue},100%,${lightness})`;
+    drawPoint(position, hue) {
+        if (this.useColors) {
+            if (position.z >= 0) {
+                this.drawColorPoint(position, `hsl(${hue},100%, 50%)`);
             } else {
-                color = "rgb(0, 0, 0)";
+                this.drawColorPoint(position, `hsl(${hue},100%, 90%)`);
             }
-        } else { 
-            if (this.useColors) {
-                color = `hsl(${hue},100%,90%)`;
-            } else {
-                color = "rgb(200, 200, 200)"
-            }
+        } else {
+            this.drawGreyscalePoint(position);
         }
-        this.ctx.fillStyle = color;
-        this.ctx.fillRect(210 + coor[0], 210 - coor[1], 1, 1);
     }
 
-    // Contour of sphere, it is always the same circle
+    drawColorPoint(position, color) {
+        this.ctx.fillStyle = color;
+        this.ctx.fillRect(210 + position.x, 210 - position.y, 1, 1);
+    }
+
+    drawGreyscalePoint(position) {
+        if (position.z >= 0) {
+            this.drawColorPoint(position, "rgb(0, 0, 0)");
+        } else {
+            this.drawColorPoint(position, "rgb(200, 200, 200");
+        }
+    }
+
     drawContour() {
         // Draw contour
         for (var i = 0; i < 360; i += INCREASE_BY) {
             // Drawing circle
-            this.drawPoint([
-                Math.sin(radians(i)) * this.radius,
-                Math.cos(radians(i)) * this.radius,
-                0 // Anything 0 or above is fine for black point
-            ], 0, "0%");
+            this.drawGreyscalePoint({
+                x: Math.sin(radians(i)) * this.radius,
+                y: Math.cos(radians(i)) * this.radius,
+                z: 0 // Anything 0 or above is fine for black point
+            });
         }
     }
 
-    // Turn for x (0), y (1) or z (2) axis
-    rotateForAxis(axis, coor, angle) {
+    rotateForAxis(axis, position, angle) {
+        let coor = [position.x, position.y, position.z];
+
         angle = radians(angle);
         let spliced = coor.splice(axis, 1)[0];
         let c1 = coor[0];
@@ -106,7 +110,11 @@ class SphereCanvas extends HTMLElement {
 
         coor.splice(axis, 0, spliced);
 
-        return coor;
+        return {
+            x: coor[0],
+            y: coor[1],
+            z: coor[2],
+        };
     }
 
     // Turn for all axis rotations
