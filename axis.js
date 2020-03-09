@@ -64,15 +64,18 @@ class AxisControls extends HTMLElement {
     }
 
     fireValueChanged() {
-        this.dispatchEvent(new CustomEvent('value-changed', { 
-            value: this.value,
-        }));
+        this.dispatchEvent(new CustomEvent('value-changed', this.state));
     }
 
     fireVisibilityChanged() {
-        this.dispatchEvent(new CustomEvent('visibility-changed', { 
-            value: this.visible,
-        }));
+        this.dispatchEvent(new CustomEvent('visibility-changed',  this.state));
+    }
+
+    get state() {
+        return {
+            value: this.value,
+            visible: this.visibile,
+        }
     }
 
     get value() {
