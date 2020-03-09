@@ -8,20 +8,20 @@ class SphereCanvas extends HTMLElement {
 
         this.controlStates = {
             x: {
-                value: 0,
+                angle: 0,
                 visible: true,
             },
             y: {
-                value: 0,
+                angle: 0,
                 visible: true,
             },
             z: {
-                value: 0,
+                angle: 0,
                 visible: true,
             },
         };
 
-        this.radius = this.getAttribute('radius');
+        this.radius = this.getAttribute('radius') || 200;
         this.useColors = true;
 
         const shadow = this.attachShadow({mode: 'open'});
@@ -41,6 +41,8 @@ class SphereCanvas extends HTMLElement {
 
         shadow.appendChild(style);
         shadow.appendChild(container);
+
+        this.draw();
     }
 
     get controls() {
@@ -53,6 +55,7 @@ class SphereCanvas extends HTMLElement {
 
     set shouldUseColors(newValue) {
         this.useColors = newValue;
+        this.draw();
     }
 
     drawPoint(coor, hue, lightness = "50%") {

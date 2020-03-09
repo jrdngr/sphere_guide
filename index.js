@@ -1,3 +1,5 @@
+import { realMod } from './math.js';
+
 // Based on: https://medium.com/@refik/a-journey-and-a-method-for-drawing-spheres-5b24246ca479
 
 const sphere = document.getElementById('sphere');
@@ -29,7 +31,7 @@ function getCoordinate(axis) {
 }
 
 function setCoordinate(axis, value) {
-    getControls(axis).value = realMod(value, 360);
+    getControls(axis).angle = realMod(value, 360);
 }
 
 function setAllCoordinates(x, y, z) {
@@ -57,9 +59,17 @@ function onMouseMove(event) {
     }
 }
 
-function onValueChanged() {
-    sphere.angles = [xControls.value, yControls.value, zControls.value];
+function onStateChanged() {
+    sphere.controls = {
+        x: xControls.state,
+        y: yControls.state,
+        z: zControls.state,
+    };
     draw()
+}
+
+function onUseColorChanged() {
+    sphere.shouldUseColors = useColorsCheckbox.checked;
 }
 
 function draw() {
@@ -67,17 +77,17 @@ function draw() {
 }
 
 document.getElementById("reset-button").onclick = onResetClicked;
-// canvas.addEventListener('mousemove', onMouseMove);
-useColorsCheckbox.addEventListener('change', draw);
+//canvas.addEventListener('mousemove', onMouseMove);
+useColorsCheckbox.addEventListener('change', onUseColorChanged);
 
-xControls.addEventListener('value-changed', onValueChanged);
-xControls.addEventListener('visibility-changed', draw);
+xControls.addEventListener('value-changed', onStateChanged);
+xControls.addEventListener('visibility-changed', onStateChanged);
 
-yControls.addEventListener('value-changed', onValueChanged);
-yControls.addEventListener('visibility-changed', draw);
+yControls.addEventListener('value-changed', onStateChanged);
+yControls.addEventListener('visibility-changed', onStateChanged);
 
-zControls.addEventListener('value-changed', onValueChanged);
-zControls.addEventListener('visibility-changed', draw);
+zControls.addEventListener('value-changed', onStateChanged);
+zControls.addEventListener('visibility-changed', onStateChanged);
 
 
 draw();

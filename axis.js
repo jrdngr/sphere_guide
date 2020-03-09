@@ -73,16 +73,16 @@ class AxisControls extends HTMLElement {
 
     get state() {
         return {
-            value: this.value,
-            visible: this.visibile,
+            angle: this.angle,
+            visible: this.visible,
         }
     }
 
-    get value() {
+    get angle() {
         return this.angleInputBox.value;
     }
 
-    set value(newValue) {
+    set angle(newValue) {
         this.angleInputBox.value = newValue;
         this.slider.value = newValue;
         this.fireValueChanged();
