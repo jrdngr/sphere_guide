@@ -11,6 +11,11 @@ const zControls = document.getElementById('z-controls');
 const useColorsCheckbox = document.getElementById("use-colors-checkbox");
 
 const MOUSE_DAMPING = 1/3;
+const TOUCH_DAMPING = 1/50;
+const TOUCH_THROTTLE = 10;
+
+let currentTouch = undefined;
+let touchEvents = 0;
 
 function getControls(name) {
     if (name.startsWith('x')) {
@@ -47,15 +52,46 @@ function onResetClicked() {
 
 function onMouseMove(event) {
     if (event.buttons > 0) {
-        const x = getCoordinate('x');
-        let newX = x - Math.floor(event.movementY * MOUSE_DAMPING);
-        setCoordinate('x', newX);
+        const dx = - Math.floor(event.movementY * MOUSE_DAMPING);
+        const dy = Math.floor(event.movementX * MOUSE_DAMPING)
+        shiftCoordinates(dx ,dy);
+    }
+}
 
-        const y = getCoordinate('y');
-        let newY = y + Math.floor(event.movementX * MOUSE_DAMPING);
-        setCoordinate('y', newY);
+function shiftCoordinates(dx, dy) {
+    setCoordinate('x', getCoordinate('x') + dx);
+    setCoordinate('y', getCoordinate('y') + dy);
 
-        draw()
+    draw()
+}
+
+function onTouchStart(event) {
+    if (!currentTouch) {
+        currentTouch = event.changedTouches[0];
+    }
+}
+
+function onTouchMove(event) {
+    for (const touch of event.changedTouches) {
+        if (touch.identifier === currentTouch.identifier) {
+            touchEvents += 1;
+            if (touchEvents % TOUCH_THROTTLE == 0) {
+                const dx = Math.floor((touch.screenY - currentTouch.screenY) * TOUCH_DAMPING);
+                const dy = Math.floor((touch.screenX - currentTouch.screenX) * TOUCH_DAMPING);
+                shiftCoordinates(-dx, dy);
+            }
+            return;
+        }
+    }
+}
+
+function onTouchEnd(event) {
+    for (const touch of event.changedTouches) {
+        if (touch.identifier === currentTouch.identifier) {
+            currentTouch = undefined;
+            touchEvents = 0;
+            return;
+        }
     }
 }
 
@@ -77,8 +113,12 @@ function draw() {
 }
 
 document.getElementById("reset-button").onclick = onResetClicked;
-sphere.addEventListener('mousemove', onMouseMove);
 useColorsCheckbox.addEventListener('change', onUseColorChanged);
+
+sphere.addEventListener('mousemove', onMouseMove);
+sphere.addEventListener('touchstart', onTouchStart);
+sphere.addEventListener('touchmove', onTouchMove);
+sphere.addEventListener('touchend', onTouchEnd);
 
 xControls.addEventListener('value-changed', onStateChanged);
 xControls.addEventListener('visibility-changed', onStateChanged);

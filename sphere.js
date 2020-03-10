@@ -1,4 +1,4 @@
-import { radians, realMod, sphericalToPoint } from './math.js';
+import { radians, sphericalToPoint } from './math.js';
 
 const INCREASE_BY = 0.4;
 
